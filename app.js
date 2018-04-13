@@ -24,14 +24,13 @@ fs.readFile("data/friendlist.json", (err, data) => {
 
 				request.get(`https://www.instagram.com/p/${node.shortcode}`, (error, response, body) => {
 					const dataPost = JSON.parse(/<script type=\"text\/javascript\">window\._sharedData = (.*?);<\/script>/g.exec(body)[1]);
-
 					let itemsProcessed = 0;
 
 					dataPost.entry_data.PostPage[0].graphql.shortcode_media.edge_media_preview_like.edges.forEach(obj => {
 						const node = obj.node;
 
-						if (friendlist.indexOf(node.username) === -1) {
-							friendlist.push(node.username);
+						if (friendlist[node.username] == null) {
+							friendlist[node.username] = node.id;
 						}
 
 						itemsProcessed++;
